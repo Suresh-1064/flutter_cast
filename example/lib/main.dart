@@ -18,6 +18,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
   final _flutterCastPlugin = FlutterCast();
+  String castId = "AERP2245";
 
   @override
   void initState() {
@@ -33,6 +34,8 @@ class _MyAppState extends State<MyApp> {
     try {
       platformVersion =
           await _flutterCastPlugin.getPlatformVersion() ?? 'Unknown platform version';
+     var casting = _flutterCastPlugin.setCastId(castId);
+
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }

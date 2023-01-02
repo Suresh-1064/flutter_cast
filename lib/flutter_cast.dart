@@ -5,4 +5,7 @@ class FlutterCast {
   Future<String?> getPlatformVersion() {
     return FlutterCastPlatform.instance.getPlatformVersion();
   }
+  Future<String?> setCastId(String key) {
+    return FlutterCastPlatform.instance.setCastId(key);
+  }
 }

@@ -1,5 +1,6 @@
 package innovature.cast.flutter_cast
 
+import android.util.Log
 import androidx.annotation.NonNull
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -15,6 +16,7 @@ class FlutterCastPlugin: FlutterPlugin, MethodCallHandler {
   /// This local reference serves to register the plugin with the Flutter Engine and unregister it
   /// when the Flutter Engine is detached from the Activity
   private lateinit var channel : MethodChannel
+  private lateinit var castId : String
 
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_cast")
@@ -24,7 +26,13 @@ class FlutterCastPlugin: FlutterPlugin, MethodCallHandler {
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
-    } else {
+    }
+    else if (call.method == "castId"){
+      castId = call.arguments.toString()
+      Log.d("CASTID",castId)
+    }
+
+    else {
       result.notImplemented()
     }
   }

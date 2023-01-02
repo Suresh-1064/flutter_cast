@@ -14,4 +14,11 @@ class MethodChannelFlutterCast extends FlutterCastPlatform {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }
+  @override
+  Future<String?> setCastId(String key) async {
+
+    final  numNotesOn =
+    await methodChannel.invokeMethod('castId', key);
+    return numNotesOn;
+  }
 }
