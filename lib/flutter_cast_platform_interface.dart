@@ -26,4 +26,7 @@ abstract class FlutterCastPlatform extends PlatformInterface {
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() has not been implemented.');
   }
+  Future<String?> setCastId(String key) {
+    throw UnimplementedError('setCastId() has not been implemented.');
+  }
 }
