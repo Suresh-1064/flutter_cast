@@ -2,6 +2,9 @@ package innovature.cast.flutter_cast
 
 import android.util.Log
 import androidx.annotation.NonNull
+import io.flutter.Log
+import io.flutter.embedding.android.FlutterEngineConfigurator
+import io.flutter.embedding.engine.FlutterEngine
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -12,6 +15,9 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 /** FlutterCastPlugin */
+class FlutterCastPlugin : FlutterPlugin, MethodCallHandler {
+
+    private lateinit var channel: MethodChannel
 class FlutterCastPlugin: FlutterPlugin, MethodCallHandler , ActivityAware {
   /// The MethodChannel that will the communication between Flutter and native Android
   ///
@@ -20,11 +26,24 @@ class FlutterCastPlugin: FlutterPlugin, MethodCallHandler , ActivityAware {
   private lateinit var channel : MethodChannel
   private lateinit var castId : String
 
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_cast")
-    channel.setMethodCallHandler(this)
-  }
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_cast")
+        channel.setMethodCallHandler(this)
 
+        flutterPluginBinding
+            .platformViewRegistry
+            .registerViewFactory("CastButton", NativeViewFactory())
+
+    }
+
+    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        if (call.method == "getPlatformVersion") {
+            result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        } else {
+            result.notImplemented()
+        }
+
+    }
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
     if (call.method == "getPlatformVersion") {
       result.success("Android ${android.os.Build.VERSION.RELEASE}")
@@ -39,29 +58,12 @@ class FlutterCastPlugin: FlutterPlugin, MethodCallHandler , ActivityAware {
     }
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-   // channel.setMethodCallHandler(null)
-    binding
-      .platformViewRegistry
-      .registerViewFactory(
-        "CastButton",
-        NativeViewFactory()
-      )
-  }
-
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
-  }
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
 
   override fun onDetachedFromActivityForConfigChanges() {
     TODO("Not yet implemented")
   }
 
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-    TODO("Not yet implemented")
-  }
-
-  override fun onDetachedFromActivity() {
-    TODO("Not yet implemented")
-  }
+    }
 }
