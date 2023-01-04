@@ -8,7 +8,7 @@ class CastButton extends StatelessWidget {
   CastButton({Key? key}) : super(key: key);
 
   // This is used in the platform side to register the view.
-  String viewType = 'CastButton';
+  String viewType = "CastButton";
 
   // Pass parameters to the platform side.
 
